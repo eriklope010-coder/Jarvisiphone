@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080b18">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="JARVIS">
+<link rel="manifest" href="manifest.webmanifest">
+<title>JARVIS — Asistente personal</title>
+<style>
+:root{--bg:#070a15;--panel:rgba(15,22,43,.82);--cyan:#41f5ff;--pink:#ff3df2;--violet:#7c4dff;--text:#edf7ff;--muted:#9aa9c6}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--text);font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(ellipse at 50% 0%,#18234a 0%,var(--bg) 56%);overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(transparent 96%,rgba(65,245,255,.035) 97%),linear-gradient(90deg,transparent 96%,rgba(255,61,242,.025) 97%);background-size:100% 5px,5px 100%;z-index:-1}
+.wrap{max-width:720px;margin:auto;padding:env(safe-area-inset-top) 18px calc(24px + env(safe-area-inset-bottom))}
+header{display:flex;align-items:center;justify-content:space-between;padding:22px 2px 12px}.brand{letter-spacing:.24em;font-weight:800;font-size:1.2rem}.brand span{color:var(--cyan);text-shadow:0 0 15px #41f5ff}.status{font-size:.72rem;color:var(--cyan);border:1px solid #41f5ff55;border-radius:99px;padding:7px 10px}
+.hero{text-align:center;padding:22px 0 24px}.orb{width:174px;height:174px;margin:8px auto 18px;border-radius:50%;position:relative;display:grid;place-items:center;filter:drop-shadow(0 0 22px #41f5ff50)}
+.orb:before,.orb:after{content:"";position:absolute;border-radius:50%;inset:0;border:2px solid transparent;border-top-color:var(--cyan);border-bottom-color:var(--pink);animation:spin 7s linear infinite}
+.orb:after{inset:13px;border-top-color:var(--pink);border-bottom-color:var(--cyan);animation-direction:reverse;animation-duration:4s}
+.core{width:100px;height:100px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#c8ffff,#37c9ee 18%,#263d80 48%,#0a1027 72%);box-shadow:inset 0 0 24px #fff8,0 0 35px #41f5ff70;position:relative}
+.core:after{content:"";position:absolute;inset:19px;border:1px solid #caffff99;border-radius:50%}
+@keyframes spin{to{transform:rotate(360deg)}}.orb.listening{animation:pulse 1.2s ease-in-out infinite}.orb.listening:before{border-width:4px;filter:drop-shadow(0 0 10px var(--cyan))}
+@keyframes pulse{50%{transform:scale(1.04)}}
+h1{font-size:1.7rem;margin:0 0 8px;letter-spacing:.12em} .subtitle{color:var(--muted);font-size:.94rem;margin:0 auto;max-width:440px;line-height:1.5}
+.panel{background:var(--panel);border:1px solid #6c8cff30;border-radius:20px;padding:16px;margin:12px 0;box-shadow:0 10px 35px #0003;backdrop-filter:blur(14px)}
+.panel-title{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;letter-spacing:.13em;color:#b5c9e9;margin-bottom:12px}
+#conversation{height:150px;overflow:auto;display:flex;flex-direction:column;gap:10px}.bubble{padding:10px 12px;border-radius:13px;line-height:1.4;font-size:.93rem;max-width:92%;white-space:pre-wrap;overflow-wrap:anywhere}.jarvis{align-self:flex-start;background:#14213d;border:1px solid #41f5ff35}.user{align-self:flex-end;background:#292047;border:1px solid #ff3df233}
+.controls{display:flex;gap:9px}.controls input{min-width:0;flex:1}.field{width:100%;border:1px solid #6177a855;border-radius:13px;background:#080e20;color:var(--text);padding:13px;font:inherit;outline:none}.field:focus{border-color:var(--cyan);box-shadow:0 0 0 2px #41f5ff1c}
+button,.app{border:1px solid #41f5ff55;color:var(--text);background:linear-gradient(135deg,#142442,#251b40);border-radius:13px;padding:12px 14px;font:inherit;cursor:pointer;transition:.2s}button:active,.app:active{transform:scale(.97)}button.primary{background:linear-gradient(120deg,#087d92,#6030a7);border-color:#80fbff}.voice-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.voice-row button{min-height:48px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.app{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:7px;text-decoration:none;min-height:84px;text-align:center;font-size:.82rem}.app b{font-size:1.45rem}.note{color:var(--muted);font-size:.78rem;line-height:1.5;margin:12px 2px 0}.pill{font-size:.72rem;color:var(--cyan)}.footer{text-align:center;color:#71809d;font-size:.72rem;padding:20px 0}
+@media(min-width:560px){.grid{grid-template-columns:repeat(6,1fr)}.orb{width:190px;height:190px}.core{width:110px;height:110px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div class="brand">J<span>A</span>RVIS<span>.</span></div><div class="status" id="status">● EN ESPERA</div></header>
+<section class="hero">
+  <div class="orb" id="orb"><div class="core"></div></div>
+  <h1>¿QUÉ NECESITAS?</h1>
+  <p class="subtitle">Tu asistente personal. Habla conmigo o escribe un comando.</p>
+</section>
+<section class="panel">
+ <div class="panel-title"><span>CHAT NEURAL</span><span class="pill">LOCAL · DEMO</span></div>
+ <div id="conversation" aria-live="polite"><div class="bubble jarvis">JARVIS en línea. Prueba: «hola», «qué hora es», «abre YouTube», «abre Spotify» o «tiempo en Madrid».</div></div>
+ <form id="chatForm" class="controls"><input id="command" class="field" autocomplete="off" placeholder="Escribe un comando…" aria-label="Escribe un comando"><button class="primary" type="submit">Enviar</button></form>
+ <div class="voice-row"><button id="listen" class="primary">🎙️ Hablar con JARVIS</button><button id="stop">🔇 Detener voz</button></div>
+ <p class="note">La voz usa las funciones disponibles en tu navegador. En iPhone, el reconocimiento de voz puede no estar disponible en todos los navegadores; toca el botón para comprobarlo.</p>
+</section>
+<section class="panel">
+ <div class="panel-title"><span>ACCESOS RÁPIDOS</span><span class="pill">TUS APPS</span></div>
+ <div class="grid">
+  <a class="app" href="https://open.spotify.com/" target="_blank" rel="noopener"><b>♫</b>Spotify</a>
+  <a class="app" href="https://www.youtube.com/" target="_blank" rel="noopener"><b>▶</b>YouTube</a>
+  <a class="app" href="https://wa.me/" target="_blank" rel="noopener"><b>✉</b>WhatsApp</a>
+  <a class="app" href="https://www.tiktok.com/" target="_blank" rel="noopener"><b>♪</b>TikTok</a>
+  <a class="app" href="https://www.instagram.com/" target="_blank" rel="noopener"><b>◎</b>Instagram</a>
+  <a class="app" href="https://chatgpt.com/" target="_blank" rel="noopener"><b>✳</b>ChatGPT</a>
+ </div>
+ <p class="note">Los accesos abren las webs oficiales; iOS decide si abre la app instalada o el navegador. Una web no puede controlar otras apps libremente.</p>
+</section>
+<section class="panel">
+ <div class="panel-title"><span>HERRAMIENTAS</span><span class="pill">SIN API</span></div>
+ <div class="grid" style="grid-template-columns:repeat(2,1fr)">
+  <button id="weather">🌦️ Consultar tiempo</button><button id="webSearch">🔎 Buscar en la web</button>
+ </div>
+ <p class="note">El tiempo y las búsquedas se abren en servicios web. Para respuestas inteligentes reales hace falta conectar una API de IA y proteger su clave en un servidor; no la pongas dentro del HTML público.</p>
+</section>
+<div class="footer">JARVIS · Interfaz experimental · Hecho para iPhone</div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const conversation=$('conversation');
+function addBubble(text,who='jarvis'){const b=document.createElement('div');b.className='bubble '+who;b.textContent=text;conversation.appendChild(b);conversation.scrollTop=conversation.scrollHeight;}
+function speak(text){if(!('speechSynthesis'in window)){addBubble('Este navegador no ofrece síntesis de voz.','jarvis');return;}window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='es-ES';u.rate=1.02;u.pitch=1.0;window.speechSynthesis.speak(u);}
+function answer(raw){const q=raw.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();let r='';
+ if(!q){return;}
+ if(/\b(hola|buenas|hey|buenos dias|buenas tardes)\b/.test(q))r='¡Ey! Aquí estoy. ¿Qué hacemos?';
+ else if(q.includes('como estas')||q.includes('que tal'))r='Todo en orden por aquí. ¿Y tú, cómo vas?';
+ else if(q.includes('quien eres')||q.includes('tu nombre'))r='Soy JARVIS, tu asistente personal. De momento estoy en modo local: puedo responder a comandos básicos y abrir herramientas.';
+ else if(q.includes('hora'))r='Son las '+new Intl.DateTimeFormat('es-ES',{hour:'2-digit',minute:'2-digit'}).format(new Date())+'.';
+ else if(q.includes('fecha')||q.includes('que dia'))r='Hoy es '+new Intl.DateTimeFormat('es-ES',{weekday:'long',day:'numeric',month:'long'}).format(new Date())+'.';
+ else if(q.includes('spotify')||q.includes('musica')){r='Abriendo Spotify.';window.open('https://open.spotify.com/','_blank','noopener');}
+ else if(q.includes('youtube')){r='Abriendo YouTube.';window.open('https://www.youtube.com/','_blank','noopener');}
+ else if(q.includes('whatsapp')){r='Abriendo WhatsApp.';window.open('https://wa.me/','_blank','noopener');}
+ else if(q.includes('tiktok')){r='Abriendo TikTok.';window.open('https://www.tiktok.com/','_blank','noopener');}
+ else if(q.includes('instagram')){r='Abriendo Instagram.';window.open('https://www.instagram.com/','_blank','noopener');}
+ else if(q.includes('chatgpt')){r='Abriendo ChatGPT.';window.open('https://chatgpt.com/','_blank','noopener');}
+ else if(q.includes('tiempo')||q.includes('clima')){r='Abriendo la previsión del tiempo. Puedes decir una ciudad para buscarla.';window.open('https://www.google.com/search?q='+encodeURIComponent('tiempo '+raw),'_blank','noopener');}
+ else if(q.includes('busca')||q.includes('buscar')||q.includes('google')||q.includes('web')){r='Abriendo una búsqueda web.';window.open('https://www.google.com/search?q='+encodeURIComponent(raw),'_blank','noopener');}
+ else if(q.includes('gracias'))r='¡De nada! Para eso estamos.';
+ else if(q.includes('ayuda')||q.includes('comandos'))r='Puedo saludar, decir la hora o la fecha, abrir Spotify, YouTube, WhatsApp, TikTok, Instagram y ChatGPT, y lanzar búsquedas o consultar el tiempo en la web.';
+ else r='Todavía no tengo conectada una IA online, así que no puedo entender cualquier pregunta como ChatGPT. Puedo ayudarte con comandos básicos; para conversación inteligente hay que configurar un servicio de IA.';
+ addBubble(r);speak(r);
+}
+$('chatForm').addEventListener('submit',e=>{e.preventDefault();const v=$('command').value.trim();if(!v)return;addBubble(v,'user');$('command').value='';answer(v);});
+$('listen').addEventListener('click',()=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){addBubble('El reconocimiento de voz no está disponible en este navegador. Prueba Safari actualizado o usa el cuadro de texto.','jarvis');return;}const rec=new SR();rec.lang='es-ES';rec.interimResults=false;rec.maxAlternatives=1;$('status').textContent='● ESCUCHANDO';$('orb').classList.add('listening');rec.onresult=e=>{const v=e.results[0][0].transcript;addBubble(v,'user');answer(v);};rec.onerror=e=>addBubble('No se pudo reconocer la voz ('+e.error+'). Comprueba los permisos del micrófono.','jarvis');rec.onend=()=>{$('status').textContent='● EN ESPERA';$('orb').classList.remove('listening');};try{rec.start();}catch(e){addBubble('No se pudo iniciar el micrófono. Espera un momento y prueba otra vez.','jarvis');$('status').textContent='● EN ESPERA';$('orb').classList.remove('listening');}});
+$('stop').addEventListener('click',()=>{if('speechSynthesis'in window)window.speechSynthesis.cancel();$('status').textContent='● EN ESPERA';$('orb').classList.remove('listening');});
+$('weather').addEventListener('click',()=>window.open('https://www.google.com/search?q='+encodeURIComponent('tiempo hoy'),'_blank','noopener'));
+$('webSearch').addEventListener('click',()=>window.open('https://www.google.com/','_blank','noopener'));
+if('serviceWorker'in navigator && location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+</script>
+</body></html>

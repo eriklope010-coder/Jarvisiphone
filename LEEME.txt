@@ -1,0 +1,25 @@
+JARVIS para iPhone — versión inicial funcional
+
+CONTENIDO
+- index.html: interfaz, chat de comandos, voz del navegador y accesos rápidos.
+- manifest.webmanifest: configuración de instalación tipo PWA.
+- sw.js: caché básica para uso sin conexión de la interfaz.
+
+PRUEBAS RÁPIDAS
+1. Abre index.html en un navegador de escritorio para comprobar la interfaz y comandos escritos.
+2. Para probar instalación PWA en iPhone, publica los tres archivos en un hosting HTTPS.
+3. En el iPhone, abre la URL en Safari, toca Compartir y luego “Añadir a pantalla de inicio”.
+4. Prueba: “hola”, “qué hora es”, “abre YouTube”, “abre Spotify”, “tiempo en Madrid”.
+5. Da permiso al micrófono si Safari lo solicita. El reconocimiento de voz depende de la versión de iOS/Safari y puede no estar disponible en todos los contextos.
+
+LIMITACIONES IMPORTANTES
+- Esto es un prototipo local con comandos predefinidos, NO una IA online real.
+- Una PWA no puede escuchar continuamente en segundo plano ni ejecutar una palabra de activación (“Jarvis”) de forma fiable en iOS.
+- iOS limita el control directo de otras aplicaciones. Los botones abren sus sitios oficiales; el sistema decide si abre la app instalada.
+- Tiempo y búsqueda se abren en el navegador; no hay API meteorológica conectada.
+- Para inteligencia online hay que conectar un proveedor de IA mediante un backend/servidor. No pongas claves secretas de API en index.html.
+- La instalación PWA requiere HTTPS y un sitio publicado; abrir el HTML como archivo no instala una PWA.
+- WhatsApp, Spotify, YouTube, TikTok, Instagram y ChatGPT pueden requerir iniciar sesión o tener sus apps instaladas.
+
+PERSONALIZACIÓN
+Puedes cambiar textos, colores y enlaces editando index.html. Después de actualizar un sitio publicado, puede hacer falta recargar o borrar la caché del sitio.
